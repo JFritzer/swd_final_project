@@ -1,5 +1,8 @@
 import streamlit as st
 
+#Page header configuration:
+st.set_page_config(page_title="Music Recognition", page_icon="🎵", layout="wide")
+
 
 st.markdown("# Music recognition tool, using file upload")
 

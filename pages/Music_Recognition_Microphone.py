@@ -30,4 +30,13 @@ wav_audio_data = st_audiorec()
 #with open("audio_file.mp3", "wb") as f:
 #    f.write(audio_file.getbuffer())
 
-#Audio Recorder: https://github.com/stefanrmmr/streamlit-audio-recorder
+
+
+
+
+
+
+
+
+
+#Audio Recorder imported from: https://github.com/stefanrmmr/streamlit-audio-recorder

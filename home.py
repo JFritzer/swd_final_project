@@ -25,8 +25,3 @@ if st.button('GayCheck'):
 else:
     st.write('Press the button.')
 
-
-
-#Debug:
-    
-#Page Music_Recognition_File_Upload: Doesnt show up in Streamlit as page. I dont know why.

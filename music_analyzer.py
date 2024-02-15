@@ -2,7 +2,7 @@ import numpy as np
 from scipy.io.wavfile import read
 from scipy.signal import spectrogram
 from math import sqrt
-from tqdm import tqdm
+from stqdm import stqdm
 import settings
 
 def create_spectrum(file_path: str, spectrogram_resolution: float = settings.SPECTOGRAM_RES) -> tuple:
@@ -53,7 +53,7 @@ def max_filter(Sxx, radius : int = settings.MAX_FILTER_RADIUS) -> np.ndarray:
 
     new_Sxx = np.zeros_like(Sxx)
 
-    for x in tqdm(range(new_Sxx.shape[0])):
+    for x in stqdm(range(new_Sxx.shape[0]), desc="Running max filter"):
         for y in range(new_Sxx.shape[1]):
             try:
                 values = padded_Sxx[x:x+2*radius+1, y:y+2*radius+1]
@@ -82,7 +82,7 @@ def peak_filter(Sxx, new_Sxx) -> np.ndarray:
     """
     peak_Sxx = np.zeros_like(new_Sxx)
 
-    for x in tqdm(range(new_Sxx.shape[0])):
+    for x in stqdm(range(new_Sxx.shape[0]), desc="Running peak filter"):
         for y in range(new_Sxx.shape[1]):
             if new_Sxx[x][y] == Sxx[x][y]:
                 peak_Sxx[x][y] = 1
@@ -111,7 +111,7 @@ def create_peak_windows(peak_Sxx : np.ndarray, delta_x : int = settings.DELTA_X,
     """
     peak_dict = {}
 
-    for x in tqdm(range(peak_Sxx.shape[0] - delta_x - 2)):
+    for x in stqdm(range(peak_Sxx.shape[0] - delta_x - 2), desc="Creating peak windows"):
         for y in range(peak_Sxx.shape[1] - delta_y):
             if peak_Sxx[x][y] == 1:
                 search_window_x = x + 2
@@ -149,7 +149,7 @@ def create_hash_dict(peak_dict : dict, frequencies : np.ndarray, segtimes : np.n
         The list of hashes.    
     """
     hashes = []
-    for key in peak_dict:
+    for key in stqdm(peak_dict, desc="Creating hash dictionary"):
         for value in peak_dict[key]:
             delta_time = sqrt(abs(segtimes[key[1]] - segtimes[value[1]]) + abs(frequencies[key[0]] - frequencies[value[0]]))
             hashes.append([segtimes[key[1]], hash((frequencies[key[0]], frequencies[value[0]], delta_time))])

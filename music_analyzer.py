@@ -26,7 +26,6 @@ def create_spectrum(file_path: str, spectrogram_resolution: float = settings.SPE
     Sxx: ndarray
         The spectrogram.
     """
-    
     sample_rate, new_sound = read(file_path)
     nperseg = int(sample_rate * spectrogram_resolution)
     frequencies, segtimes, Sxx = spectrogram(new_sound, sample_rate, nperseg=nperseg)
@@ -179,3 +178,21 @@ def read_in(file_path : str) -> list:
     
     return hashes
 
+def recognise_song(song_recognise, song_compare) -> int:
+    """
+    Takes hashes of two songs and compares them to find the highest number of time deltas that match.
+
+    Parameters
+    ----------
+    song_recognise: list
+        The list of hashes of the song to be recognised.
+    
+    song_compare: list
+        The list of hashes of the song to be compared.
+    
+    Returns
+    -------
+    max_count: int
+        The maximum number of time deltas that match.
+    """
+    pass

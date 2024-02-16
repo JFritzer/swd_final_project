@@ -4,6 +4,8 @@ from typing import Optional, BinaryIO
 import uuid
 import os
 from music_analyzer import read_in
+import wave
+import settings
 
 # Page header configuration:
 st.set_page_config(page_title="Music and Image Import", page_icon="🎵", layout="wide")
@@ -28,8 +30,15 @@ def upload_files(audio_file: Optional[BinaryIO], image_file: Optional[BinaryIO],
         os.makedirs(directory_image, exist_ok=True)
         # Save audio file
         audio_filename = os.path.join(directory_audio, f"{title}_{entry_id}.wav")
-        with open(audio_filename, 'wb') as audio_f:
-            audio_f.write(audio)
+        with wave.open(audio_filename, 'w') as audio_f:
+            audio_f.setnchannels(settings.NUM_CHANNELS)
+            audio_f.setsampwidth(settings.BIT_DEPTH // 8)
+            audio_f.setframerate(settings.SAMPLE_RATE)
+            audio_f.setcomptype(settings.COMPRESSION_TYPE, 'NONE')
+            audio_f.writeframes(audio)
+            
+    
+            # audio_f.write(audio)
         # Save image file
         image_filename = os.path.join(directory_image, f"{title}_{entry_id}.png")
         with open(image_filename, 'wb') as image_f:

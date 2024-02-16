@@ -26,6 +26,7 @@ def create_spectrum(file_path: str, spectrogram_resolution: float = settings.SPE
     Sxx: ndarray
         The spectrogram.
     """
+    
     sample_rate, new_sound = read(file_path)
     nperseg = int(sample_rate * spectrogram_resolution)
     frequencies, segtimes, Sxx = spectrogram(new_sound, sample_rate, nperseg=nperseg)
@@ -177,3 +178,4 @@ def read_in(file_path : str) -> list:
     hashes = create_hash_dict(peak_dict, frequencies, segtimes)
     
     return hashes
+

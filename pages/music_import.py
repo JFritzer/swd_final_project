@@ -3,6 +3,7 @@ from tinydb import TinyDB, Query
 from typing import Optional, BinaryIO
 import uuid
 import os
+from music_analyzer import read_in
 
 # Page header configuration:
 st.set_page_config(page_title="Music and Image Import", page_icon="🎵", layout="wide")
@@ -26,15 +27,18 @@ def upload_files(audio_file: Optional[BinaryIO], image_file: Optional[BinaryIO],
         directory_image = "Image"
         os.makedirs(directory_image, exist_ok=True)
         # Save audio file
-        audio_filename = os.path.join(directory_audio, f"{title}_{entry_id}.mp3")
+        audio_filename = os.path.join(directory_audio, f"{title}_{entry_id}.wav")
         with open(audio_filename, 'wb') as audio_f:
             audio_f.write(audio)
         # Save image file
         image_filename = os.path.join(directory_image, f"{title}_{entry_id}.png")
         with open(image_filename, 'wb') as image_f:
             image_f.write(image)
+        
+        hashes = read_in(audio_filename)
+
         # Inserting audio file and image file data into the database
-        db.insert({'id': entry_id, 'type': 'multimedia', 'title': title, 'artist': interpret, 'album': album, 'audio_file_path': audio_filename, 'image_file_path': image_filename})
+        db.insert({'id': entry_id, 'type': 'multimedia', 'title': title, 'artist': interpret, 'album': album, 'audio_file_path': audio_filename, 'image_file_path': image_filename, 'hashes' : hashes})
         
 def get_info_by_id(entry_id: str) -> Optional[str]:
     """

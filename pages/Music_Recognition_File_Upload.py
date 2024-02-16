@@ -4,6 +4,8 @@ from typing import Optional, BinaryIO
 import uuid
 import os
 from music_analyzer import read_in
+import wave
+import settings
 
 
 # Verbindung zur Datenbank herstellen
@@ -28,11 +30,16 @@ def calculate_hashes(audio_file: BinaryIO) -> Optional[str]:
     Returns:
         str: Hashes des Audios.
     """
+
+    audio = audio_file.read()
     if audio_file is not None:
         # Speichern der Audiodatei temporär auf dem Server
-        with open("uploaded_audio.wav", "wb") as f:
-            f.write(audio_file.read())
-        
+        with wave.open("uploaded_audio.wav", "wb") as audio_f:
+            audio_f.setnchannels(settings.NUM_CHANNELS)
+            audio_f.setsampwidth(settings.BIT_DEPTH // 8)
+            audio_f.setframerate(settings.SAMPLE_RATE)
+            audio_f.setcomptype(settings.COMPRESSION_TYPE, 'NONE')
+            audio_f.writeframes(audio)
         # Aufruf der read_in-Funktion mit dem Dateipfad
         hashes = read_in("uploaded_audio.wav")
         

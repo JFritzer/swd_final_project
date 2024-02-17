@@ -1,12 +1,12 @@
 import streamlit as st
 from tinydb import TinyDB, Query
-from typing import Optional, BinaryIO
+from typing import Optional, BinaryIO, Tuple
 import os
 from music_analyzer import read_in
 from music_analyzer import recognise_song #(song_recognise, song_compare) -> int:
 import wave
 import settings
-from typing import Optional, Tuple
+
 
 
 
@@ -91,6 +91,13 @@ class SongImport:
             return hashes
         else:
             return None
+        
+class SongDetector:
+    def __init__(self):
+        self.db = MultimediaDatabase
+
+    def song_detecton():
+        pass
     
 
 # Uploading audio file

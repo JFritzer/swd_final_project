@@ -16,6 +16,7 @@ st.set_page_config(page_title="Music Recognition", page_icon="🎵", layout="wid
 
 
 st.markdown("# Music recognition tool, using file upload")
+st.subheader("Here you can upload your file and the program gives you the name of the song back.")
 
 
 # Funktion zum Lesen des Audios und Berechnen der Hashes

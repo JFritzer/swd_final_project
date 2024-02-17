@@ -6,6 +6,7 @@ from st_audiorec import st_audiorec
 
 
 st.markdown("# Music recognition tool, using the microphone")
+st.subheader("Here you can record an audiotrack and the program gives you the name of the song back.")
 
 
 #Full Recording device.
@@ -14,7 +15,7 @@ wav_audio_data = st_audiorec()
 
 
 
-
+st.write("Right now, you only can record an audiofile. The recognition of the song is not implemented yet.")
 
 
 

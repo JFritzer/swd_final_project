@@ -11,7 +11,10 @@ import settings
 st.set_page_config(page_title="Music and Image Import", page_icon="🎵", layout="wide")
 
 # Markdown title for the app
-st.markdown("# Music and Image import tool for database filling")
+st.title("Music import tool for adding new songs to the database")
+st.write(" ")
+st.write(" ")
+st.write(" ")
 
 # Connect to the database
 db = TinyDB('./db/multimedia_database.json')
@@ -78,16 +81,20 @@ def get_title_by_id(entry_id: str) -> Optional[str]:
         return None
 
 def main() -> None:
-    # Uploading audio file
-    audio_file = st.file_uploader("Please upload an audio file.", type=[".wav"])
 
+    st.subheader("Import a new song by uploading an audio and an image file. Choose a title, artist, and album for the song.")
+    # Uploading audio file
+    st.write(" ")
+
+    audio_file = st.file_uploader("Please upload an audio file.", type=[".wav"])
     # Uploading image file
     image_file = st.file_uploader("Please upload an image file.", type=[".png"])
 
+
     # Text inputs for title, artist, and album
-    title = st.text_input("Enter the title:")
-    interpret = st.text_input("Enter the artist:")
-    album = st.text_input("Enter the album:")
+    title = st.text_input("Enter the title of the song:")
+    interpret = st.text_input("Enter the artist of the song:")
+    album = st.text_input("Enter the albumname of the song:")
 
     # Start import button
     if st.button("Start import"):
@@ -96,6 +103,14 @@ def main() -> None:
         upload_files(audio_file, image_file, title, interpret, album)
 
         st.write("Import finished!")
+
+    st.write(" ")
+    st.write(" ")
+    st.write(" ")
+
+
+    st.subheader("Fetch information about a song by entering the ID of the entry.")
+    st.write(" ")
 
     # Text input for entry ID
     entry_id = st.text_input("Enter the ID of the entry:")

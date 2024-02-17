@@ -4,7 +4,7 @@ from moviepy.editor import AudioFileClip
 from typing import Optional  # Typ-Hinweis hinzugefügt
 
 # Seiteneinstellungen festlegen
-st.set_page_config(page_title="Music Import", page_icon="🎵", layout="wide")
+st.set_page_config(page_title="Music Youtube download", page_icon="🎵", layout="wide")
 
 def download_video(url: str) -> Optional[str]:
     """
@@ -53,6 +53,7 @@ def convert_mp4_to_wav(mp4_file: str) -> Optional[str]:
 def main():
     # Seitentitel
     st.title("YouTube Video zu WAV konvertieren")
+    st.subheader("Here you can download a youtube video and convert it to a wav file.")
 
     # Eingabefeld für die YouTube-URL
     url = st.text_input("Gib die URL des YouTube-Videos ein:")
@@ -71,6 +72,8 @@ def main():
                 st.error("Fehler beim Konvertieren in WAV.")
         else:
             st.error("Fehler beim Herunterladen des Videos.")
+
+    st.write("Later on, you can choose a snippet from a youtube video and regocnise the music from it.")
 
 if __name__ == "__main__":
     main()

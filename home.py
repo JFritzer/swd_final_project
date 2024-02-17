@@ -2,7 +2,6 @@ import streamlit as st
 import tinydb as db
 from random import randint
 
-db_test = db.TinyDB('./db/db_test.json')
 
 
 

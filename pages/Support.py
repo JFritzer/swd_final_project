@@ -15,7 +15,8 @@ email_text = st.text_area("Enter your message:")
 
 if st.button("Send email"):
     try:
-        email = MIMEText(email_text)
+        email_text_with_customer = f"From: {email_customer}\n\n{email_text}"
+        email = MIMEText(email_text_with_customer)
         email['From'] = email_customer
         email['To'] = email_support
         email['Subject'] = email_subject
@@ -37,3 +38,6 @@ if st.button("Send email"):
 
 #Quelle: https://github.com/tonykipkemboi/streamlit-smtp-test/blob/main/streamlit_app.py
 #Bei der Problemsuche bezüglich 2-FA dann auch das: https://discuss.streamlit.io/t/send-email-with-smtp-and-gmail-address/48145/4
+        
+
+

@@ -9,6 +9,11 @@ import settings
 # Klasse für die Multimedia-Datenbank
 class MultimediaDatabase:
     def __init__(self, db_path: str = './db/multimedia_database.json') -> None:
+        # Stellen Sie sicher, dass das Verzeichnis vorhanden ist
+        db_dir = os.path.dirname(db_path)
+        os.makedirs(db_dir, exist_ok=True)
+
+        # Erstellen Sie die TinyDB-Instanz
         self.db = TinyDB(db_path)
 
     def insert_entry(self, entry_data: dict) -> None:

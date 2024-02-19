@@ -1,3 +1,4 @@
+from distutils.command import upload
 import streamlit as st
 from tinydb import TinyDB, Query
 from typing import Optional, BinaryIO, Tuple
@@ -23,28 +24,14 @@ class MultimediaDatabase:
     def __init__(self, db_path: str = './db/multimedia_database.json') -> None:
         self.db = TinyDB(db_path)
 
-    def get_entry_id_by_hashes(self, recognise_hashes: str) -> str:
-        """Hole die ID eines Eintrags aus der Datenbank anhand der Hashes."""
-        Entry = Query()
-        entry = self.db.get(Entry.hashes == recognise_hashes)
-        if entry:
-            return entry.get('id')
-        else:
-            return None
-    
-    def find_matching_hashes(self, hashes: str) -> Optional[str]:
-        """
-        Sucht in der Datenbank nach übereinstimmenden Hashes.
+    def get_hahes_out_database(self):
+        for entry in self.db.all():
+            entry_id = entry.get('id')
+            hashes = entry.get('hashes')
+            yield entry_id, hashes
+            return entry_id,hashes
+        
 
-        Args:
-            hashes (str): Die Hashes des hochgeladenen Audios.
-
-        Returns:
-            Optional[str]: Die ID des gefundenen Eintrags oder None, wenn kein übereinstimmender Eintrag gefunden wurde.
-        """
-        matching_id = self.get_entry_id_by_hashes(hashes)
-        return matching_id
-    
     def get_title_and_image_by_id(self, entry_id: str) -> Optional[Tuple[str, str]]:
         """Holt den Titel und den Bildpfad eines Eintrags aus der Datenbank anhand der ID."""
         Entry = Query()
@@ -83,21 +70,37 @@ class SongImport:
                 audio_f.setcomptype(settings.COMPRESSION_TYPE, 'NONE')
                 audio_f.writeframes(audio)
             # Aufruf der read_in-Funktion mit dem Dateipfad
-            hashes = read_in("uploaded_audio.wav")
+            upload_hashes = read_in("uploaded_audio.wav")
         
             # Löschen der temporären Audiodatei
             os.remove("uploaded_audio.wav")
         
-            return hashes
+            return upload_hashes
         else:
             return None
         
 class SongDetector:
     def __init__(self):
-        self.db = MultimediaDatabase
+        self.db = MultimediaDatabase()
 
-    def song_detecton():
-        pass
+    def compare_songs(self, upload_hashes):
+        max_matches = 0
+        matching_song = None
+
+        for entry_id, db_hashes in self.db.get_hahes_out_database():
+            num_matches = 0
+            for upload_hash in upload_hashes:
+                for db_hash in db_hashes:
+                    # Compare the similarity of hash pairs
+                    num_matches = recognise_song(upload_hash, db_hash)
+                        
+            if num_matches > max_matches:
+                max_matches = num_matches
+                matching_song = entry_id
+
+        return matching_song, max_matches
+
+    
     
 
 # Uploading audio file
@@ -109,26 +112,23 @@ db = MultimediaDatabase()
 
 # Button to start the recognition
 if st.button("Start recognition"):
+    for entry_id, hashes in db.get_hahes_out_database():
+        print("Song ID:", entry_id)
+        print("-" * 50)  # Trennlinie für bessere Lesbarkeit
     if audio_file is not None:
         st.write("Recognition started...")
         # Calculate hashes of the uploaded audio
         song_import = SongImport()
         hashes = song_import.calculate_hashes(audio_file)
         if hashes:
-            # Search for matching hashes in the database
-            matching_id = db.find_matching_hashes(hashes)
-            if matching_id:
-                # Fetch title and image path from the database using the matching ID
-                title, image_path = db.get_title_and_image_by_id(matching_id)
-                if title and image_path:
-                    st.write(f"Matching ID found in the database: {matching_id}")
-                    st.write(f"Title: {title}")
-                    st.image(image_path, caption='Album Cover', use_column_width=True)
-                else:
-                    st.write("Error retrieving title and image path from the database.")
-            else:
-                st.write("No matching entry found in the database.")
-            st.write("Recognition finished!")
+            # Call detect_song to find matching hashes in the database
+            song_detector = SongDetector()
+            matching_hashes_count = song_detector.detect_song(hashes)
+            
+            # You can now use matching_hashes_count for further analysis or display
+            st.write(f"Number of matching hashes found: {matching_hashes_count}")
+
+            # Other code for displaying results...
         else:
             st.write("Error")
     else:

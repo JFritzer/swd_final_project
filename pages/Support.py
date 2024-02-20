@@ -2,6 +2,21 @@ import streamlit as st
 import smtplib as smt
 from email.mime.text import MIMEText
 
+def passwort_auslesen(dateiname):
+    try:
+        with open(dateiname, 'r') as file:
+            passwort = file.read().strip()  # Passwort aus der Datei lesen und führende/trailing Leerzeichen entfernen
+        return passwort
+    except FileNotFoundError:
+        print("Die Datei wurde nicht gefunden.")
+        return None
+    
+dateiname = "password.txt"
+passwort = passwort_auslesen(dateiname)
+
+
+
+
 st.header("Support")
 st.write("If you have any questions or need help, please feel free to contact us.")
 
@@ -23,7 +38,7 @@ if st.button("Send email"):
 
         server = smt.SMTP('smtp.gmail.com', 587)
         server.starttls()
-        server.login(email_support, "wwdsjpxgvxwsuptk")
+        server.login(email_support, passwort)
         server.sendmail(email_customer, email_support, email.as_string())
         server.quit()
 

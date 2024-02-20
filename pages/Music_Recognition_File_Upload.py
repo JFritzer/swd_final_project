@@ -25,11 +25,13 @@ class MultimediaDatabase:
         self.db = TinyDB(db_path)
 
     def get_hahes_out_database(self):
+        entry_ids = []
+        hashes = []
         for entry in self.db.all():
-            entry_id = entry.get('id')
-            hashes = entry.get('hashes')
-            yield entry_id, hashes
-            return entry_id,hashes
+            entry_ids.append(entry.get('id'))
+            hashes.append(entry.get('hashes'))
+
+        return entry_ids, hashes
         
 
     def get_title_and_image_by_id(self, entry_id: str) -> Optional[Tuple[str, str]]:
@@ -81,18 +83,17 @@ class SongImport:
         
 class SongDetector:
     def __init__(self):
-        self.db = MultimediaDatabase()
+        self.db = TinyDB('./db/multimedia_database.json')
 
     def compare_songs(self, upload_hashes):
         max_matches = 0
         matching_song = None
 
-        for entry_id, db_hashes in self.db.get_hahes_out_database():
-            num_matches = 0
-            for upload_hash in upload_hashes:
-                for db_hash in db_hashes:
-                    # Compare the similarity of hash pairs
-                    num_matches = recognise_song(upload_hash, db_hash)
+        for entry in self.db.all():
+            entry_id = entry.get('id')
+            hashes = entry.get('hashes')
+
+            num_matches = recognise_song(upload_hashes, hashes)
                         
             if num_matches > max_matches:
                 max_matches = num_matches
@@ -112,9 +113,9 @@ db = MultimediaDatabase()
 
 # Button to start the recognition
 if st.button("Start recognition"):
-    for entry_id, hashes in db.get_hahes_out_database():
-        print("Song ID:", entry_id)
-        print("-" * 50)  # Trennlinie für bessere Lesbarkeit
+    # for entry_id, hashes in db.get_hahes_out_database():
+    #     print("Song ID:", entry_id)
+    #     print("-" * 50)  # Trennlinie für bessere Lesbarkeit
     if audio_file is not None:
         st.write("Recognition started...")
         # Calculate hashes of the uploaded audio
@@ -123,11 +124,11 @@ if st.button("Start recognition"):
         if hashes:
             # Call detect_song to find matching hashes in the database
             song_detector = SongDetector()
-            matching_hashes_count = song_detector.detect_song(hashes)
+            matching_hashes_count = song_detector.compare_songs(hashes)
             
             # You can now use matching_hashes_count for further analysis or display
             st.write(f"Number of matching hashes found: {matching_hashes_count}")
-
+            st.write(f"Song is : {db.get_title_and_image_by_id(matching_hashes_count[0])[0]}")
             # Other code for displaying results...
         else:
             st.write("Error")

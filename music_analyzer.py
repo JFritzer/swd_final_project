@@ -185,14 +185,26 @@ def recognise_song(song_recognise, song_compare) -> int:
     Parameters
     ----------
     song_recognise: list
-        The list of hashes of the song to be recognised.
+        The list of points and hashes of the song to be recognised.
     
     song_compare: list
-        The list of hashes of the song to be compared.
+        The list of points and hashes of the song to be compared.
     
     Returns
     -------
     max_count: int
         The maximum number of time deltas that match.
     """
-    pass
+
+    time_delta_dict = {}
+
+    for pointA_recognise, hash_recognise in song_recognise:
+        for pointA_compare, hash_compare in song_compare:
+            if hash_recognise == hash_compare:
+                time_delta = pointA_compare - pointA_recognise
+                if time_delta not in time_delta_dict:
+                    time_delta_dict[time_delta] = 1
+                else:
+                    time_delta_dict[time_delta] += 1
+
+    return max(time_delta_dict.values())

@@ -31,18 +31,18 @@ class Main:
                 wav_file = self.youtube.convert_mp4_to_wav(video_file, start_time, end_time)
                 if wav_file:
                     st.success(f"Die WAV-Datei wurde erfolgreich erstellt: {wav_file}")
-                    st.write("Recognition started...")
+                    #st.write("Recognition started...")
                     # Calculate hashes of the uploaded audio
-                    hashes = self.songimporter.calculate_hashes(wav_file)
-                    if hashes:
+                    #hashes = self.songimporter.calculate_hashes(wav_file)
+                    #if hashes:
                         # Call detect_song to find matching hashes in the database
-                        matching_hashes_count = self.songdetector.compare_songs(hashes)
+                        #matching_hashes_count = self.songdetector.compare_songs(hashes)
                         # You can now use matching_hashes_count for further analysis or display
-                        st.write(f"Number of matching hashes found: {matching_hashes_count}")
-                        st.write(f"Song is : {self.db.get_title_and_image_by_id(matching_hashes_count[0])[0]}")
+                        #st.write(f"Number of matching hashes found: {matching_hashes_count}")
+                        #st.write(f"Song is : {self.db.get_title_and_image_by_id(matching_hashes_count[0])[0]}")
                         # Other code for displaying results...
-                    else:
-                        st.error("Fehler")
+                    #else:
+                        #st.error("Fehler")
                 else:
                     st.error("Fehler beim Konvertieren in WAV.")
             else:

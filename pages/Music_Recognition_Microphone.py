@@ -51,6 +51,12 @@ if __name__=="__main__":
 
 
 
+#Änderungen (ToDo):
+    # Recognition Teil hier noch hinzufügen
+    # Dropdown Menü wieder Datei auswählen und dann recognizen.
+
+
+
 
 
 

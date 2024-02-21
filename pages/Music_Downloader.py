@@ -55,3 +55,13 @@ if __name__ == "__main__":
     main.run()
 
 
+
+#Änderungen (ToDo):
+    # Download und Recognition seperat.
+        # Ein Button soll das Lied herunterladen.
+        # Ein anderer Button soll das Lied erkennen.
+    # Die mp4 Datei soll nach konvertierung in wav format gelöscht werden.
+    # Die wav Datei soll in einem eigenen Ordner gespeichert werden
+        # Hier sollte es ein Dropdown Menü geben um den Song auszuwählen und dann recognized zu werden.
+    
+

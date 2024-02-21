@@ -87,22 +87,32 @@ class SongImporter:
         Returns:
             str: Hashes des Audios.
         """
+        # Überprüfen, ob audio_file ein Dateipfad oder ein Dateiobjekt ist
+        if isinstance(audio_file, str):
+            # Es handelt sich um einen Dateipfad
+            audio_path = audio_file
+            with open(audio_path, 'rb') as f:
+                audio_data = f.read()
+        else:
+            # Es handelt sich um ein Dateiobjekt
+            audio_data = audio_file.read()
 
-        audio = audio_file.read()
-        if audio_file is not None:
+        # Jetzt können Sie wie gewohnt mit den Audiodaten arbeiten
+        if audio_data is not None:
             # Speichern der Audiodatei temporär auf dem Server
             with wave.open("uploaded_audio.wav", "wb") as audio_f:
                 audio_f.setnchannels(settings.NUM_CHANNELS)
                 audio_f.setsampwidth(settings.BIT_DEPTH // 8)
                 audio_f.setframerate(settings.SAMPLE_RATE)
                 audio_f.setcomptype(settings.COMPRESSION_TYPE, 'NONE')
-                audio_f.writeframes(audio)
+                audio_f.writeframes(audio_data)
+
             # Aufruf der read_in-Funktion mit dem Dateipfad
             upload_hashes = read_in("uploaded_audio.wav")
-        
+
             # Löschen der temporären Audiodatei
             os.remove("uploaded_audio.wav")
-        
+
             return upload_hashes
         else:
             return None

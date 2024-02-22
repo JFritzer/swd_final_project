@@ -8,6 +8,7 @@ import wave
 import settings  
 from pytube import YouTube
 from moviepy.editor import AudioFileClip
+import concurrent.futures
 
 # Klasse für die Multimedia-Datenbank
 class MultimediaDatabase:
@@ -121,19 +122,26 @@ class SongDetector:
     def __init__(self):
         self.db = TinyDB('./db/multimedia_database.json')
 
-    def compare_songs(self, upload_hashes):
+    def compare_songs(self, upload_hashes, max_workers=settings.MAX_WORKERS):  # Set your desired maximum number of workers
         max_matches = 0
         matching_song = None
 
-        for entry in self.db.all():
-            entry_id = entry.get('id')
-            hashes = entry.get('hashes')
+        def recognise_song_wrapper(upload_hashes, hashes):
+            return recognise_song(upload_hashes, hashes)
 
-            num_matches = recognise_song(upload_hashes, hashes)
-                        
-            if num_matches > max_matches:
-                max_matches = num_matches
-                matching_song = entry_id
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+            # Submitting tasks for each entry in the database
+            future_to_entry = {executor.submit(recognise_song_wrapper, upload_hashes, entry.get('hashes')): entry for entry in self.db.all()}
+
+            # Iterating through completed futures
+            for future in concurrent.futures.as_completed(future_to_entry):
+                entry = future_to_entry[future]
+                entry_id = entry.get('id')
+                num_matches = future.result()
+
+                if num_matches > max_matches:
+                    max_matches = num_matches
+                    matching_song = entry_id
 
         return matching_song, max_matches
     

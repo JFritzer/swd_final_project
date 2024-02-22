@@ -10,6 +10,7 @@ from pytube import YouTube
 from moviepy.editor import AudioFileClip
 import concurrent.futures
 import shutil
+from pydub import AudioSegment
 
 # Klasse für die Multimedia-Datenbank
 class MultimediaDatabase:
@@ -93,20 +94,23 @@ class SongImporter:
     def upload_files(self, audio_file, image_file, title: str, interpret: str, album: str) -> None:
         """Lade Audio-, Bilddateien und hash hoch und füge sie in die Datenbank ein."""
         if audio_file is not None and image_file is not None:
-            audio = audio_file.read()
             image = image_file.read()
             entry_id = str(uuid.uuid4())
             directory_audio = "Audio"
             os.makedirs(directory_audio, exist_ok=True)
             directory_image = "Image"
             os.makedirs(directory_image, exist_ok=True)
+            
             audio_filename = os.path.join(directory_audio, f"{title}_{entry_id}.wav")
-            with wave.open(audio_filename, 'w') as audio_f:
-                audio_f.setnchannels(settings.NUM_CHANNELS)
-                audio_f.setsampwidth(settings.BIT_DEPTH // 8)
-                audio_f.setframerate(settings.SAMPLE_RATE)
-                audio_f.setcomptype(settings.COMPRESSION_TYPE, 'NONE')
-                audio_f.writeframes(audio)
+            with open(audio_filename, "wb") as f:
+                f.write(audio_file.getbuffer())
+            
+            audio = AudioSegment.from_wav(audio_filename)
+            audio = audio.set_channels(settings.NUM_CHANNELS)
+            audio = audio.set_frame_rate(settings.SAMPLE_RATE)
+            audio = audio.set_sample_width(settings.BIT_DEPTH // 8)
+            audio.export(audio_filename, format="wav")
+
             image_filename = os.path.join(directory_image, f"{title}_{entry_id}.png")
             with open(image_filename, 'wb') as image_f:
                 image_f.write(image)
@@ -127,32 +131,32 @@ class SongImporter:
         # Überprüfen, ob audio_file ein Dateipfad oder ein Dateiobjekt ist
         if isinstance(audio_file, str):
             # Es handelt sich um einen Dateipfad
-            audio_path = audio_file
-            with open(audio_path, 'rb') as f:
-                audio_data = f.read()
+            audio_filename = "uploaded_audio.wav"
+            audio = AudioSegment.from_wav(audio_file)
+            audio = audio.set_channels(settings.NUM_CHANNELS)
+            audio = audio.set_frame_rate(settings.SAMPLE_RATE)
+            audio = audio.set_sample_width(settings.BIT_DEPTH // 8)
+            audio.export(audio_filename, format="wav")
         else:
             # Es handelt sich um ein Dateiobjekt
-            audio_data = audio_file.read()
+            audio_filename = "uploaded_audio.wav"
+            with open(audio_filename, "wb") as f:
+                f.write(audio_file.getbuffer())
+            
+            audio = AudioSegment.from_wav(audio_filename)
+            audio = audio.set_channels(settings.NUM_CHANNELS)
+            audio = audio.set_frame_rate(settings.SAMPLE_RATE)
+            audio = audio.set_sample_width(settings.BIT_DEPTH // 8)
+            audio.export(audio_filename, format="wav")
+        
+        # Aufruf der read_in-Funktion mit dem Dateipfad
+        upload_hashes = read_in("uploaded_audio.wav")
 
-        # Jetzt können Sie wie gewohnt mit den Audiodaten arbeiten
-        if audio_data is not None:
-            # Speichern der Audiodatei temporär auf dem Server
-            with wave.open("uploaded_audio.wav", "wb") as audio_f:
-                audio_f.setnchannels(settings.NUM_CHANNELS)
-                audio_f.setsampwidth(settings.BIT_DEPTH // 8)
-                audio_f.setframerate(settings.SAMPLE_RATE)
-                audio_f.setcomptype(settings.COMPRESSION_TYPE, 'NONE')
-                audio_f.writeframes(audio_data)
+        # Löschen der temporären Audiodatei
+        os.remove("uploaded_audio.wav")
 
-            # Aufruf der read_in-Funktion mit dem Dateipfad
-            upload_hashes = read_in("uploaded_audio.wav")
+        return upload_hashes
 
-            # Löschen der temporären Audiodatei
-            os.remove("uploaded_audio.wav")
-
-            return upload_hashes
-        else:
-            return None
         
 class SongDetector:
     def __init__(self):

@@ -1,6 +1,7 @@
 import streamlit as st
 from st_audiorec import st_audiorec
 from classes import MultimediaDatabase, SongDetector,SongImporter
+import io
 
 class Main:
     def __init__(self) -> None:
@@ -10,14 +11,17 @@ class Main:
 
     def run(self) -> None:
         st.markdown("# Music recognition tool, using the microphone")
-        st.subheader("Here you can record an audiotrack and the program gives you the name of the song back.")
+        st.write("Here you can record an recognize an audio file by using your microphone.")
+        st.write("After you stop the recording, recognition will start automatically.")
+        st.write("Press on reset before you use it.")
         #Full Recording device.
-        wav_audio_data = st_audiorec()
-        st.write("Right now, you only can record an audiofile. The recognition of the song is not implemented yet.")
+        wav_audio_data = st_audiorec() #This function gives you an audio data type byte back.
+
         if wav_audio_data is not None:
             st.write("Recognition started...")
             # Calculate hashes of the uploaded audio
-            hashes = self.songimporter.calculate_hashes(wav_audio_data)
+            audio_file = io.BytesIO(wav_audio_data)
+            hashes = self.songimporter.calculate_hashes(audio_file)
             if hashes:
                 #Call detect_song to find matching hashes in the database
                 matching_hashes_count = self.songdetector.compare_songs(hashes)
@@ -28,7 +32,7 @@ class Main:
             else:
                 st.write("Error")
         else:
-            st.write("Please upload an audio file.")
+            st.write("Please record an audio file.")
 
 if __name__=="__main__":
     main = Main()

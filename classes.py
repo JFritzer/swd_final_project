@@ -9,6 +9,7 @@ import settings
 from pytube import YouTube
 from moviepy.editor import AudioFileClip
 import concurrent.futures
+import shutil
 
 # Klasse für die Multimedia-Datenbank
 class MultimediaDatabase:
@@ -16,6 +17,7 @@ class MultimediaDatabase:
         # Stellen Sie sicher, dass das Verzeichnis vorhanden ist
         db_dir = os.path.dirname(db_path)
         os.makedirs(db_dir, exist_ok=True)
+        self.db_path = db_path
 
         # Erstellen Sie die TinyDB-Instanz
         self.db = TinyDB(db_path)
@@ -48,6 +50,40 @@ class MultimediaDatabase:
             return title, image_path
         else:
                 return None, None
+        
+    def delete_audio_file(self, audio_id: str) -> None:
+        """Löscht eine Audio-Datei und das zugehörige Bild sowie den Eintrag in der Datenbank."""
+
+        # Titel und Bildpfad abrufen
+        title, image_path = self.get_title_and_image_by_id(audio_id)
+        # Eintrag in der Datenbank löschen
+        self.db.remove(Query().id == audio_id)
+    
+        # Bild und Audio-Datei löschen
+        if image_path and os.path.exists(image_path):
+            os.remove(image_path)
+    
+        audio_directory = "Audio"
+        audio_file = f"{title}_{audio_id}.wav"
+        audio_path = os.path.join(audio_directory, audio_file)
+        if os.path.exists(audio_path):
+            os.remove(audio_path)
+
+        # Entferne auch die Bilddatei, falls vorhanden
+        image_directory = "Image"
+        image_file = f"{title}_{audio_id}.png"
+        image_path = os.path.join(image_directory, image_file)
+        if os.path.exists(image_path):
+            os.remove(image_path)
+            
+    def delete_everything(self):
+       # Alle Einträge aus der Datenbank entfernen
+        self.db.truncate()
+        # Löschen des Audio-Verzeichnisses und des Bild-Verzeichnisses
+        audio_dir = "Audio"
+        image_dir = "Image"
+        shutil.rmtree(audio_dir, ignore_errors=True)
+        shutil.rmtree(image_dir, ignore_errors=True)
 
 # Klasse für den Song-Import
 class SongImporter:

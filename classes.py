@@ -10,28 +10,52 @@ from pytube import YouTube
 from moviepy.editor import AudioFileClip
 import concurrent.futures
 import shutil
+from typing import List, Union
 
-# Klasse für die Multimedia-Datenbank
 class MultimediaDatabase:
     def __init__(self, db_path: str = './db/multimedia_database.json') -> None:
-        # Stellen Sie sicher, dass das Verzeichnis vorhanden ist
+        """
+        Initialize the MultimediaDatabase class.
+
+        Args:
+            db_path (str, optional): Path to the database file. Defaults to './db/multimedia_database.json'.
+        """
+        # Ensure the directory exists
         db_dir = os.path.dirname(db_path)
         os.makedirs(db_dir, exist_ok=True)
         self.db_path = db_path
-
-        # Erstellen Sie die TinyDB-Instanz
+        # Create the TinyDB instance
         self.db = TinyDB(db_path)
 
     def insert_entry(self, entry_data: dict) -> None:
-        """Füge einen Eintrag in die Datenbank ein."""
+        """
+        Insert an entry into the database.
+
+        Args:
+            entry_data (dict): Data of the entry to be inserted.
+        """
         self.db.insert(entry_data)
 
     def get_entry_by_id(self, entry_id: str) -> dict:
-        """Hole einen Eintrag aus der Datenbank anhand der ID."""
+        """
+        Get an entry from the database by its ID.
+
+        Args:
+            entry_id (str): ID of the entry to retrieve.
+
+        Returns:
+            dict: Data of the retrieved entry.
+        """
         Entry = Query()
         return self.db.get(Entry.id == entry_id)
     
-    def get_hahes_out_database(self):
+    def get_hashes_from_database(self) -> Tuple[List[str], List[str]]:
+        """
+        Get all entry IDs and their corresponding hashes from the database.
+
+        Returns:
+            Tuple[List[str], List[str]]: Tuple containing lists of entry IDs and hashes.
+        """
         entry_ids = []
         hashes = []
         for entry in self.db.all():
@@ -41,7 +65,15 @@ class MultimediaDatabase:
         return entry_ids, hashes
         
     def get_title_and_image_by_id(self, entry_id: str) -> Optional[Tuple[str, str]]:
-        """Holt den Titel und den Bildpfad eines Eintrags aus der Datenbank anhand der ID."""
+        """
+        Get the title and image path of an entry from the database by its ID.
+
+        Args:
+            entry_id (str): ID of the entry to retrieve.
+
+        Returns:
+            Optional[Tuple[str, str]]: Tuple containing title and image path, or None if entry not found.
+        """
         Entry = Query()
         entry = self.db.get(Entry.id == entry_id)
         if entry:
@@ -49,17 +81,21 @@ class MultimediaDatabase:
             image_path = entry.get('image_file_path')
             return title, image_path
         else:
-                return None, None
+            return None, None
         
     def delete_audio_file(self, audio_id: str) -> None:
-        """Löscht eine Audio-Datei und das zugehörige Bild sowie den Eintrag in der Datenbank."""
+        """
+        Delete an audio file, its associated image, and the entry from the database.
 
-        # Titel und Bildpfad abrufen
+        Args:
+            audio_id (str): ID of the audio file.
+        """
+        # Get title and image path
         title, image_path = self.get_title_and_image_by_id(audio_id)
-        # Eintrag in der Datenbank löschen
+        # Remove entry from the database
         self.db.remove(Query().id == audio_id)
     
-        # Bild und Audio-Datei löschen
+        # Delete image and audio file
         if image_path and os.path.exists(image_path):
             os.remove(image_path)
     
@@ -69,29 +105,46 @@ class MultimediaDatabase:
         if os.path.exists(audio_path):
             os.remove(audio_path)
 
-        # Entferne auch die Bilddatei, falls vorhanden
+        # Also remove the image file if exists
         image_directory = "Image"
         image_file = f"{title}_{audio_id}.png"
         image_path = os.path.join(image_directory, image_file)
         if os.path.exists(image_path):
             os.remove(image_path)
             
-    def delete_everything(self):
-       # Alle Einträge aus der Datenbank entfernen
+    def delete_everything(self) -> None:
+        """
+        Delete all entries from the database and all audio and image files.
+        """
+        # Remove all entries from the database
         self.db.truncate()
-        # Löschen des Audio-Verzeichnisses und des Bild-Verzeichnisses
+        # Delete the Audio and Image directories
         audio_dir = "Audio"
         image_dir = "Image"
         shutil.rmtree(audio_dir, ignore_errors=True)
         shutil.rmtree(image_dir, ignore_errors=True)
 
-# Klasse für den Song-Import
 class SongImporter:
     def __init__(self, database: MultimediaDatabase) -> None:
+        """
+        Initialize the SongImporter class.
+
+        Args:
+            database (MultimediaDatabase): The database instance to interact with.
+        """
         self.database = database
 
-    def upload_files(self, audio_file, image_file, title: str, interpret: str, album: str) -> None:
-        """Lade Audio-, Bilddateien und hash hoch und füge sie in die Datenbank ein."""
+    def upload_files(self, audio_file: BinaryIO, image_file: BinaryIO, title: str, interpret: str, album: str) -> None:
+        """
+        Upload audio and image files, calculate hashes, and insert them into the database.
+
+        Args:
+            audio_file (BinaryIO): Binary file object of the audio.
+            image_file (BinaryIO): Binary file object of the image.
+            title (str): Title of the multimedia file.
+            interpret (str): Artist name.
+            album (str): Album name.
+        """
         if audio_file is not None and image_file is not None:
             audio = audio_file.read()
             image = image_file.read()
@@ -113,30 +166,24 @@ class SongImporter:
             hashes = read_in(audio_filename)
             self.database.insert_entry({'id': entry_id, 'type': 'multimedia', 'title': title, 'artist': interpret, 'album': album, 'audio_file_path': audio_filename, 'image_file_path': image_filename, 'hashes' : hashes})
 
-    # Funktion zum Lesen des Audios und Berechnen der Hashes
-    def calculate_hashes(self, audio_file: BinaryIO) -> Optional[str]:
+    def calculate_hashes(self, audio_file: Union[str, BinaryIO]) -> Optional[str]:
         """
-        Liest das hochgeladene Audiodatei ein und berechnet die Hashes.
+        Calculate hashes of the uploaded audio file.
 
         Args:
-            audio_file (BinaryIO): Hochgeladene Audiodatei.
+            audio_file (Union[str, BinaryIO]): File path or binary file object of the audio.
 
         Returns:
-            str: Hashes des Audios.
+            Optional[str]: Calculated hashes of the audio.
         """
-        # Überprüfen, ob audio_file ein Dateipfad oder ein Dateiobjekt ist
         if isinstance(audio_file, str):
-            # Es handelt sich um einen Dateipfad
             audio_path = audio_file
             with open(audio_path, 'rb') as f:
                 audio_data = f.read()
         else:
-            # Es handelt sich um ein Dateiobjekt
             audio_data = audio_file.read()
 
-        # Jetzt können Sie wie gewohnt mit den Audiodaten arbeiten
         if audio_data is not None:
-            # Speichern der Audiodatei temporär auf dem Server
             with wave.open("uploaded_audio.wav", "wb") as audio_f:
                 audio_f.setnchannels(settings.NUM_CHANNELS)
                 audio_f.setsampwidth(settings.BIT_DEPTH // 8)
@@ -144,25 +191,49 @@ class SongImporter:
                 audio_f.setcomptype(settings.COMPRESSION_TYPE, 'NONE')
                 audio_f.writeframes(audio_data)
 
-            # Aufruf der read_in-Funktion mit dem Dateipfad
             upload_hashes = read_in("uploaded_audio.wav")
 
-            # Löschen der temporären Audiodatei
             os.remove("uploaded_audio.wav")
 
             return upload_hashes
         else:
             return None
-        
+      
 class SongDetector:
-    def __init__(self):
-        self.db = TinyDB('./db/multimedia_database.json')
+    def __init__(self, database_path: str = './db/multimedia_database.json') -> None:
+        """
+        Initialize the SongDetector class.
 
-    def compare_songs(self, upload_hashes, max_workers=settings.MAX_WORKERS):  # Set your desired maximum number of workers
+        Args:
+            database_path (str): Path to the multimedia database.
+        """
+        self.db = TinyDB(database_path)
+
+    def compare_songs(self, upload_hashes: str, max_workers: int = settings.MAX_WORKERS) -> Tuple[Optional[str], int]:
+        """
+        Compare uploaded hashes with hashes in the database to find the matching song.
+
+        Args:
+            upload_hashes (str): Hashes of the uploaded audio.
+            max_workers (int, optional): Maximum number of concurrent workers. Defaults to settings.MAX_WORKERS.
+
+        Returns:
+            Tuple[Optional[str], int]: ID of the matching song and number of matches.
+        """
         max_matches = 0
         matching_song = None
 
-        def recognise_song_wrapper(upload_hashes, hashes):
+        def recognise_song_wrapper(upload_hashes: str, hashes: str) -> int:
+            """
+            Wrapper function to call the recognise_song function with the specified hashes.
+
+            Args:
+                upload_hashes (str): Hashes of the uploaded audio.
+                hashes (str): Hashes of a song in the database.
+
+            Returns:
+                int: Number of matches.
+            """
             return recognise_song(upload_hashes, hashes)
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
@@ -182,25 +253,26 @@ class SongDetector:
         return matching_song, max_matches
     
 class Youtube:
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize the Youtube class."""
         pass
 
     def download_video(self, url: str) -> Optional[str]:
         """
-        Lädt ein YouTube-Video herunter und gibt den Dateinamen zurück.
+        Download a YouTube video and return the filename.
 
         Args:
-            url (str): Die URL des YouTube-Videos.
+            url (str): The URL of the YouTube video.
 
         Returns:
-            Optional[str]: Der Dateiname des heruntergeladenen Videos, oder None, wenn ein Fehler auftritt.
+            Optional[str]: The filename of the downloaded video, or None if an error occurs.
         """
         try:
-            # YouTube-Videoobjekt erstellen
+            # Create YouTube video object
             yt = YouTube(url)
-            # Nur den Audiostream auswählen
+            # Select only the audio stream
             video = yt.streams.filter(only_audio=True).first()
-            # Video herunterladen und Dateinamen zurückgeben
+            # Download video and return filename
             video_file = video.download()
             return video_file
         except Exception as e:
@@ -210,33 +282,33 @@ class Youtube:
 
     def convert_mp4_to_wav(self, mp4_file: str, start_time: float, end_time: float) -> Optional[str]:
         """
-        Konvertiert eine MP4-Datei in das WAV-Format und schneidet sie entsprechend der angegebenen Start- und Endzeit zu.
+        Convert an MP4 file to WAV format and trim it according to the specified start and end times.
 
         Args:
-            mp4_file (str): Der Dateiname der MP4-Datei.
-            start_time (float): Die Startzeit des Ausschnitts in Sekunden.
-            end_time (float): Die Endzeit des Ausschnitts in Sekunden.
+            mp4_file (str): The filename of the MP4 file.
+            start_time (float): The start time of the clip in seconds.
+            end_time (float): The end time of the clip in seconds.
 
         Returns:
-            Optional[str]: Der Dateiname der WAV-Datei, oder None, wenn ein Fehler auftritt.
+            Optional[str]: The filename of the WAV file, or None if an error occurs.
         """
         try:
-            # AudioFileClip-Objekt aus der MP4-Datei erstellen
+            # Create AudioFileClip object from the MP4 file
             audio = AudioFileClip(mp4_file)
         
-            # Wenn start_time und end_time 0 sind, die gesamte Datei kopieren
+            # If start_time and end_time are 0, copy the entire file
             if start_time == 0 and end_time == 0:
                 wav_file = mp4_file.replace('.mp4', '.wav')
                 audio.write_audiofile(wav_file)
                 return wav_file
         
-            # Ausschnitt zuschneiden
+            # Trim the clip
             audio = audio.subclip(start_time, end_time)
         
-            # Dateinamen für die WAV-Datei erstellen
+            # Create filename for the WAV file
             wav_file = mp4_file.replace('.mp4', '.wav')
         
-            # Audio in das WAV-Format konvertieren und WAV-Datei speichern
+            # Convert audio to WAV format and save WAV file
             audio.write_audiofile(wav_file)
             return wav_file
         except Exception as e:

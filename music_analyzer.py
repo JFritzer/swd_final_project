@@ -55,11 +55,10 @@ def max_filter(Sxx, radius : int = settings.MAX_FILTER_RADIUS) -> np.ndarray:
 
     for x in stqdm(range(new_Sxx.shape[0]), desc="Running max filter"):
         for y in range(new_Sxx.shape[1]):
-            try:
-                values = padded_Sxx[x:x+2*radius+1, y:y+2*radius+1]
-                new_Sxx[x][y] = values.max()
-            except:
-                pass
+            # Why use try? IMPORTANT
+            values = padded_Sxx[x:x+2*radius+1, y:y+2*radius+1]
+            new_Sxx[x][y] = values.max()
+            
     
     return new_Sxx
 

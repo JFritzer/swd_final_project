@@ -6,10 +6,13 @@ DELTA_X = 10
 DELTA_Y = 4
 
 #Spectogram resolution
-SPECTOGRAM_RES = 0.005
+SPECTOGRAM_RES = 0.05
 
 #WAV FILE SETTINGS
 SAMPLE_RATE = 44100
 BIT_DEPTH = 16
 NUM_CHANNELS = 1
 COMPRESSION_TYPE = 'NONE'
+
+# Maximum number of workers for the ThreadPoolExecutor
+MAX_WORKERS = 20

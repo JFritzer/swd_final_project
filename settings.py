@@ -15,5 +15,5 @@ NUM_CHANNELS = 1
 COMPRESSION_TYPE = 'NONE'
 
 # Maximum number of workers for the ThreadPoolExecutor
-MAX_WORKERS = 20
+MAX_WORKERS = 10
 

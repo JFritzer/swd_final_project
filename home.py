@@ -1,23 +1,11 @@
 import streamlit as st
-import tinydb as db
-from random import randint
-
-
-
 
 st.set_page_config(page_title="Music Recognition", page_icon=":smiley:")
 st.title("Music Recognition App by PandasEngineering")
 
-
 st.subheader("Welcome to the Music Recognition App from PandasEngineering.")
+# Bildpfad angeben und korrigieren
+image_path = "page_icon.png"
+st.image(image_path)
 
-st.write(" ")
-st.write(" ")
-st.write(" ")
-
-
-
-st.write("Please choose a option from the sidebar to get started.")
-
-
-
+st.write("Please choose an option from the sidebar to get started.")

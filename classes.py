@@ -4,13 +4,14 @@ from typing import Optional, BinaryIO, Tuple
 import uuid
 from music_analyzer import read_in  
 from music_analyzer import recognise_song 
-import wave
 import settings  
 from pytube import YouTube
 from moviepy.editor import AudioFileClip
 import concurrent.futures
 import shutil
 from pydub import AudioSegment
+from typing import List, Union
+
 
 class MultimediaDatabase:
     def __init__(self, db_path: str = './db/multimedia_database.json') -> None:

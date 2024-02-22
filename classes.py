@@ -10,11 +10,7 @@ from pytube import YouTube
 from moviepy.editor import AudioFileClip
 import concurrent.futures
 import shutil
-<<<<<<< HEAD
 from pydub import AudioSegment
-=======
-from typing import List, Union
->>>>>>> e309f84b8fbebae3b52f026338e4f48e8f0e2edb
 
 class MultimediaDatabase:
     def __init__(self, db_path: str = './db/multimedia_database.json') -> None:

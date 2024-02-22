@@ -35,14 +35,19 @@ class Main:
                     # Calculate hashes of the uploaded audio
                     hashes = self.songimport.calculate_hashes(wav_file)
                     if hashes:
-                        # Call detect_song to find matching hashes in the database
+                    # Call detect_song to find matching hashes in the database
                         matching_hashes_count = self.songdetector.compare_songs(hashes)
-                        # You can now use matching_hashes_count for further analysis or display
+                    # You can now use matching_hashes_count for further analysis or display
                         st.write(f"Number of matching hashes found: {matching_hashes_count}")
-                        st.write(f"Song is : {self.db.get_title_and_image_by_id(matching_hashes_count[0])[0]}")
-                        # Other code for displaying results...
-                    #else:
-                        st.error("Entry not found")
+                    # Other code for displaying results...
+                        entry = self.db.get_entry_by_id(matching_hashes_count[0])
+                        if entry:
+                            st.write(f"Title: {entry['title']}")
+                            st.image(entry['image_file_path'], caption='Album Cover', use_column_width=True)
+                        else:
+                            st.write("Entry not found!")
+                    else:
+                        st.write("Entry not found")
                 else:
                     st.error("Error converting mp4 to wav.")
             else:

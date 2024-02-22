@@ -35,7 +35,7 @@ class Main:
                         st.write("Entry not found!")
 
                 else:
-                    st.write("Error")
+                    st.write("Entry not found")
             else:
                 st.write("Please upload an audio file.")
 

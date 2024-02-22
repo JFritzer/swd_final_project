@@ -49,34 +49,8 @@ class Main:
                 st.error("Error during download the video.")
 
 
-        # Doesn´t needed any more bc recognition is done in the same step as the download!!!!!
 
-        #st.subheader("Afterwards you can analyze the song here:")
-        # # Uploading audio file
-        # audio_file_2 = st.file_uploader("Please upload an audio file.", type=[".mp3", ".wav", ".ogg"])
-        # # Button to start the recognition
-        # if st.button("Start recognition"):
-        #     if audio_file_2 is not None:
-        #         st.write("Recognition started...")
-        #         # Calculate hashes of the uploaded audio
-        #         hashes = self.songimport.calculate_hashes(audio_file_2)
-        #         if hashes:
-        #             # Call detect_song to find matching hashes in the database
-        #             matching_hashes_count = self.songdetector.compare_songs(hashes)
-        #             # You can now use matching_hashes_count for further analysis or display
-        #             st.write(f"Number of matching hashes found: {matching_hashes_count}")
-        #             # Other code for displaying results...
-        #             entry = self.db.get_entry_by_id(matching_hashes_count[0])
-        #             if entry:
-        #                 st.write(f"Title: {entry['title']}")
-        #                 st.image(entry['image_file_path'], caption='Album Cover', use_column_width=True)
-        #             else:
-        #                 st.write("Entry not found!")
 
-        #         else:
-        #             st.write("Error")
-        #     else:
-        #         st.write("Please upload an audio file.")
     
 
 if __name__ == "__main__":
@@ -86,11 +60,7 @@ if __name__ == "__main__":
 
 
 #Änderungen (ToDo):
-    # Download und Recognition seperat.
-        # Ein Button soll das Lied herunterladen.
-        # Ein anderer Button soll das Lied erkennen.
-    # Die mp4 Datei soll nach konvertierung in wav format gelöscht werden.
-    # Die wav Datei soll in einem eigenen Ordner gespeichert werden
-        # Hier sollte es ein Dropdown Menü geben um den Song auszuwählen und dann recognized zu werden.
+    #Die MP4 Datei und die wav datei soll nach dem download gelöscht werden.
+    #Sie sollen in einem temporären Ordner gespeichert werden.
     
 

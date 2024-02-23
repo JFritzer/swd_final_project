@@ -19,7 +19,7 @@ Bei diesem Softwareprojekt handelt es sich um ein Abschlussprojekt für Vorlesun
 * Albumcover wird bei Erkennung mit ausgegeben.
 * Teilmusikstücke zum testen bereitgestellt.
 * Einstellungsseite als .py erstellt, um Variablen anzupassen innerhalb des Codes: `settings.py`
-* Multithreading implementiert.
+* Multithreading implementiert bei Recognition.
 
 
 ## Installation:
@@ -65,3 +65,19 @@ Hinweis: Die Audio Ausschnitte sollten 10-20 Sekunden nicht übersteigen, da ans
 * Patrick Monthaler
 * Simon Mariacher
 * Julian Fritzer
+
+## Zusatzinformationen für Matthias Panny:
+
+Haben das ganze Backend (Grundfunktion der Software) ohne Vorlage aus Github geschrieben. Nur auf Basis des Papers. Kein kopieren vom Code der verlinkt ist / war.
+
+Komischerweise funktionieren unsere 2 Beispielsongs ohne Probleme. Dein Cantina Sound funktioniert ebenfalls, aber Starwars haut einfach nicht hin. Wir können uns nicht erklären warum. Auch wenn wir das CantinaBand Lied von Youtube in die Datenbank einspielen und dann dein example recognisen funktioniert alles. Nur bei StarWars nicht.
+
+Auch über Youtube funktionieren unsere 2 Songs ohne Probleme. 
+* Romeo and Juliet: https://www.youtube.com/watch?v=zNGqtG4tjzQ
+* Memorybox: https://www.youtube.com/watch?v=DFyIA76BvD0
+
+Falls du irgendwelche Fragen hast, bitte bei uns melden.
+
+Schöne Grüße
+Fritzer Julian, Patrick Monthaler, Simon Mariacher
+

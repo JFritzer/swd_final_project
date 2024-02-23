@@ -25,7 +25,7 @@ class Main:
         if st.button("Download and recognize the audio"):
             st.write("Converting the video...")
             # Video herunterladen
-            print(url)
+            # print(url)
             video_file = self.youtube.download_video(url)
             if video_file:
                 # Video in WAV konvertieren und zuschneiden

@@ -52,8 +52,21 @@ class Main:
                 self.db.delete_everything()
                 st.success("Entire database, audio, and image files deleted successfully.")
                 st.experimental_rerun()
+
+            # Abschnitt zum Abrufen von Informationen über einen Song
+            st.subheader("Fetch information about a song by entering the ID of the entry.")
+            entry_id = st.text_input("Enter the ID of the entry:")
+            if st.button("Fetch Information"):
+                entry = self.db.get_entry_by_id(entry_id)
+                if entry:
+                    st.write(f"Title: {entry['title']}")
+                    st.image(entry['image_file_path'], caption='Album Cover', use_column_width=True)
+                else:
+                    st.write("Entry not found!")
         elif password != "":
             st.warning("Incorrect password. Please try again.")
+
+
 
 # Hauptprogramm
 if __name__ == "__main__":

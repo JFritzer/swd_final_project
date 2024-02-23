@@ -1,5 +1,7 @@
 # Musikerkennungstool (like Shazam)
 
+Bei diesem Softwareprojekt handelt es sich um ein Abschlussprojekt für Vorlesung "Software-Design" des Vollzeitstudiums Mechatronik Design & Innovation am MCI-Innsbruck.
+
 ## Standard Funktionen:
 
 * Musikstücke einlernen

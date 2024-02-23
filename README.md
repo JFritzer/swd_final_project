@@ -16,7 +16,7 @@
 * Erkennungs- und Einlesevorgangsfortschrittserkennung implementiert (Ladebalken).
 * Albumcover wird bei Erkennung mit ausgegeben.
 * Teilmusikstücke zum testen bereitgestellt.
-* Einstellungsseite als .py erstellt, um Variablen anzupassen innerhalb des Codes.
+* Einstellungsseite als .py erstellt, um Variablen anzupassen innerhalb des Codes: `settings.py`
 
 
 ## Installation:
@@ -25,6 +25,7 @@
 1. In VSCode virtual environment erstellen: `python -m venv venv`
 2. Benötigte Bibliotheken über die Requierements.txt installieren: `pip install -r requirements.txt`
 3. Starten von Streamlit: `streamlit run home.py`
+4. Für Verwendung der Supportseite: E-Mail-Adresse und Passwort in `support.py` eintragen. (Aktuell konfiguriert auf Gmail inkl. 2FA) Hierbei muss ein App-Passwort verwendet werden.
 
 ## Benutzung:
 
@@ -44,3 +45,10 @@
 * Teile des Codes wurden mithilfe von CHAT-GPT erstellt und gedebuggt.
 * Grundwissen: https://www.cameronmacleod.com/blog/how-does-shazam-work
 * Grundwissen: Matthias Panny - Abschlussprojekt_Aufgabenstellung - MCI 2024
+
+
+## Ersteller:
+
+* Patrick Monthaler
+* Simon Mariacher
+* Julian Fritzer

@@ -41,6 +41,13 @@ Bei diesem Softwareprojekt handelt es sich um ein Abschlussprojekt für Vorlesun
 
 Hinweis: Die Audio Ausschnitte sollten 10-20 Sekunden nicht übersteigen, da ansonsten die Recognition zu lange dauert.
 
+## Troubleshoting:
+
+* Falls bei der Recognition über 20-30 Sekunden verwendet werden, kann es sein, dass er ewig ladet -> Streamlit nochmal starten und kürzeren Ausschnitt verwenden.
+* Falls der Youtube Downloader nicht funktioniert, handelt es sich wahrscheinlich um ein Copyright geschütztes Video -> Anderes Video verwenden.
+* Falls die Mikrofon-Recognition nicht funktioniert -> Wahrscheinlich Grundrauschen in der Aufnahme zu hoch -> Qualitativ höherwertiges Mikrofon verwenden.
+
+
 ## Quellen:
 
 * Musikstücke: Free Copyright Music from Youtube

@@ -2,6 +2,9 @@ import streamlit as st
 import smtplib as smt
 from email.mime.text import MIMEText
 
+
+st.set_page_config(page_title="Support", page_icon="💩", layout="wide")
+
 def passwort_auslesen(dateiname):
     try:
         with open(dateiname, 'r') as file:

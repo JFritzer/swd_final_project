@@ -6,6 +6,7 @@ import io
 
 class Main:
     def __init__(self) -> None:
+        st.set_page_config(page_title="Music Recognition Microphone", page_icon="🎤", layout="wide")
         self.db = MultimediaDatabase()
         self.songimporter = SongImporter(self.db)
         self.songdetector = SongDetector()

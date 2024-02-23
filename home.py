@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.set_page_config(page_title="Music Recognition", page_icon=":smiley:")
+st.set_page_config(page_title="Music Recognition", page_icon="page_icon.png")
 st.title("Music Recognition App by PandasEngineering")
 
 st.subheader("Welcome to the Music Recognition App from PandasEngineering.")

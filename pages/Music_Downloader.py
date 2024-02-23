@@ -1,6 +1,7 @@
 import streamlit as st
-from classes import Youtube, MultimediaDatabase, SongDetector, SongImporter
-
+from classes.Multimediadatabase import MultimediaDatabase
+from classes.SongImport_SongDetector import SongDetector,SongImporter
+from classes.Youtube import Youtube
 
 class Main:
     def __init__(self) -> None:

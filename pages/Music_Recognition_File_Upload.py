@@ -1,7 +1,6 @@
 import streamlit as st
-from classes import MultimediaDatabase
-from classes import SongImporter
-from classes import SongDetector
+from classes.Multimediadatabase import MultimediaDatabase
+from classes.SongImport_SongDetector import SongDetector,SongImporter
 
 class Main:
     def __init__(self)->None:

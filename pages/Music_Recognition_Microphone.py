@@ -1,6 +1,7 @@
 import streamlit as st
 from st_audiorec import st_audiorec
-from classes import MultimediaDatabase, SongDetector,SongImporter
+from classes. Multimediadatabase import MultimediaDatabase
+from classes.SongImport_SongDetector import SongDetector, SongImporter
 import io
 
 class Main:

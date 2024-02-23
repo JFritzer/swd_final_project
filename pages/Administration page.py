@@ -1,5 +1,5 @@
 import streamlit as st
-from classes import MultimediaDatabase
+from classes.Multimediadatabase import MultimediaDatabase
 import os
 from typing import List
 

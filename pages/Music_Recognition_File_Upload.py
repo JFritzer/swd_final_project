@@ -29,7 +29,7 @@ class Main:
                     entry = self.db.get_entry_by_id(matching_hashes_count[0])
                     if entry:
                         st.write(f"Title: {entry['title']}")
-                        st.image(entry['image_file_path'], caption='Album Cover', use_column_width=True)
+                        st.image(entry['image_file_path'], caption='Album Cover',width=500)
                     else:
                         st.write("Entry not found!")
 

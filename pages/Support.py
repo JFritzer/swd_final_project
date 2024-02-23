@@ -50,9 +50,3 @@ if st.button("Send email"):
         st.write("Aufgrund aktueller technischer Probleme konnte die Email nicht gesendet werden. Bitte versuchen Sie es später erneut.")
 
 
-
-#Quelle: https://github.com/tonykipkemboi/streamlit-smtp-test/blob/main/streamlit_app.py
-#Bei der Problemsuche bezüglich 2-FA dann auch das: https://discuss.streamlit.io/t/send-email-with-smtp-and-gmail-address/48145/4
-        
-
-

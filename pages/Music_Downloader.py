@@ -65,8 +65,5 @@ if __name__ == "__main__":
 
 
 
-#Änderungen (ToDo):
-    #Die MP4 Datei und die wav datei soll nach dem download gelöscht werden.
-    #Sie sollen in einem temporären Ordner gespeichert werden.
-    
+
 

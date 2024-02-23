@@ -54,6 +54,7 @@ Hinweis: Die Audio Ausschnitte sollten 10-20 Sekunden nicht übersteigen, da ans
 * Youtube Downloader: Pytube Bibliothek 
 * Mikrofonaufnahmeprogramm: https://github.com/stefanrmmr/streamlit-audio-recorder
 * Teile des Codes wurden mithilfe von CHAT-GPT erstellt und gedebuggt.
+* Supportseite: https://github.com/tonykipkemboi/streamlit-smtp-test/blob/main/streamlit_app.py / https://discuss.streamlit.io/t/send-email-with-smtp-and-gmail-address/48145/4
 * Grundwissen: https://www.cameronmacleod.com/blog/how-does-shazam-work
 * Grundwissen: Matthias Panny - Abschlussprojekt_Aufgabenstellung - MCI 2024
 

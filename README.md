@@ -13,7 +13,7 @@ Bei diesem Softwareprojekt handelt es sich um ein Abschlussprojekt für Vorlesun
 
 * Passwortgesichertes Adminpanel erstellt, um auf Datenbank zuzugreifen und Musikstücke zu verwalten.
 * Supportpage eingebaut, um Userfeedback per E-Mail zu erhalten (z.B. für Fehlermeldungen).
-* Youtubedownloader eingebaut, um Musikstücke zu erkennen, die in einem Teilbereich eines Youtubevideos vorkommen (Mit Ausschnittfunktion).
+* Youtubedownloader eingebaut, um Musikstücke zu erkennen, die in einem Teilbereich eines Youtubevideos vorkommen (Mit Ausschnittfunktion). (Test der Funktionalität z.B: https://www.youtube.com/watch?v=mmr6MVhycws)
 * Musikerkennung über Mikrofon implementiert.
 * Erkennungs- und Einlesevorgangsfortschrittserkennung implementiert (Ladebalken).
 * Albumcover wird bei Erkennung mit ausgegeben.
@@ -31,18 +31,20 @@ Bei diesem Softwareprojekt handelt es sich um ein Abschlussprojekt für Vorlesun
 
 ## Benutzung:
 
-1. Musikstücke einlernen über das Music-Import-Panel.
-2. Musikstücke erkennen über das Music-Recognition-Panel.
-3. Musikstücke erkennen über den Youtube Downloader.
-4. Musikstücke erkennen über das Mikrofon.
-5. Bei Problemen das Support-Panel benutzen.
-6. Falls Support nicht hilft, einfach das Admin-Panel benutzen. (Passwort = 1)
+1. Für das beste Erlebnis empfehlen wir die Verwendung von Google Chrome.
+2. Musikstücke einlernen über das Music-Import-Panel.
+3. Musikstücke erkennen über das Music-Recognition-Panel.
+4. Musikstücke erkennen über den Youtube Downloader.
+5. Musikstücke erkennen über das Mikrofon.
+6. Bei Problemen das Support-Panel benutzen.
+7. Falls Support nicht hilft, einfach das Admin-Panel benutzen. (Passwort = 1)
 
+Hinweis: Die Audio Ausschnitte sollten 10-20 Sekunden nicht übersteigen, da ansonsten die Recognition zu lange dauert.
 
 ## Quellen:
 
 * Musikstücke: Free Copyright Music from Youtube
-* Youtube Downloader: Pytube Bibliothek
+* Youtube Downloader: Pytube Bibliothek 
 * Mikrofonaufnahmeprogramm: https://github.com/stefanrmmr/streamlit-audio-recorder
 * Teile des Codes wurden mithilfe von CHAT-GPT erstellt und gedebuggt.
 * Grundwissen: https://www.cameronmacleod.com/blog/how-does-shazam-work

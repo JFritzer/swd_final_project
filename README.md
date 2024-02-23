@@ -19,6 +19,7 @@ Bei diesem Softwareprojekt handelt es sich um ein Abschlussprojekt für Vorlesun
 * Albumcover wird bei Erkennung mit ausgegeben.
 * Teilmusikstücke zum testen bereitgestellt.
 * Einstellungsseite als .py erstellt, um Variablen anzupassen innerhalb des Codes: `settings.py`
+* Multithreading implementiert.
 
 
 ## Installation:
